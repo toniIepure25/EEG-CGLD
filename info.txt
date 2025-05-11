@@ -1,0 +1,89 @@
+Project link: 
+
+https://www.sciencedirect.com/science/article/abs/pii/S1746809422004633?utm_source=chatgpt.com
+
+
+Here’s a deep dive into Yedukondalu & Sharma’s 2022 paper, “Cognitive load detection using circulant singular spectrum analysis and Binary Harris Hawks Optimization based feature selection” (Biomed. Signal Process Control 79:104006, 2023):
+
+1. Objective
+To build an automatic, EEG-based cognitive-load detector for mental arithmetic tasks by combining:
+
+Ci-SSA for signal decomposition,
+
+Binary Harris Hawks Optimization (BHHO) for wrapper-based feature selection, and
+
+KNN/SVM for final classification.
+The goal is to maximize detection accuracy while drastically reducing feature dimensionality. 
+ResearchGate
+
+2. Data
+MAT (Mental Arithmetic Task): 36 subjects performing serial subtraction (rest vs. task), 20-channel EEG (10–20 montage).
+
+STEW (Simultaneous Task EEG Workload): 48 subjects doing the SIMKAP test, 14-channel EEG.
+Both are publicly available (MAT via PhysioNet; STEW via IEEE DataPort). 
+ResearchGate
+
+3. Methodology
+Stage	Technique
+1. Decomposition	Circulant Singular Spectrum Analysis (Ci-SSA):
+Extracts Intrinsic Mode Functions (IMFs) from each short EEG segment to isolate dominant oscillatory components. 
+ResearchGate
+2. Feature Extraction	Compute entropy-based features (e.g. fuzzy entropy, Rényi entropy, differential entropy) on each IMF—capturing signal irregularity/time-frequency complexity. 
+ResearchGate
+3. Feature Selection	Wrapper-based selection using three binary metaheuristics:
+
+BGWO (Binary Grey Wolf Optimization)
+
+BHHO (Binary Harris Hawks Optimization)
+
+BDE (Binary Differential Evolution)
+Fitness = cross-validated classifier performance. 
+ResearchGate
+ |
+| 4. Classification | K-Nearest Neighbors (KNN) and Support Vector Machine (SVM) on the selected feature subset, evaluated via 10-fold CV. Metrics: accuracy (ACC), sensitivity (SEN), specificity (SPE), precision (PRE), F-score (F-S). 
+ResearchGate
+ |
+
+4. Binary Harris Hawks Optimization (BHHO)
+Inspiration: Models cooperative surprise-pounce of Harris’s hawks on escaping prey.
+
+Key phases:
+
+Exploration (global search) when prey is “energetic,”
+
+Exploitation (local search) as prey gets exhausted,
+
+Four besiege strategies (soft/hard besiege with/without rapid dives).
+
+Binary adaptation: Continuous position updates are passed through a sigmoid-based transfer function to decide feature inclusion (1) or exclusion (0).
+
+This balance of exploration/exploitation helps avoid local optima and converge quickly on a compact, highly discriminative feature subset.
+
+5. Main Results
+BHHO-KNN achieved the highest accuracies of
+
+96.88 % on STEW and
+
+95.28 % on MAT 
+ScienceDirect
+.
+
+Comparative performance: BHHO-KNN outperformed BGWO-KNN and BDE-KNN, as well as both SVM wrappers, with gains of ~2–3 % in accuracy.
+
+Dimensionality reduction: Feature count cut by ≈ 90 %, enabling faster training/inference.
+
+Other metrics for BHHO-KNN on both datasets all exceeded 0.95 for sensitivity, specificity, precision, and F-score—demonstrating balanced, robust detection.
+
+6. Impact & Availability
+Reproducibility: Code and processed datasets are publicly hosted on GitHub and IEEE DataPort/PhysioNet.
+
+Applications: Real-time cognitive-load monitoring in adaptive learning, workload assessment, human–machine interfaces.
+
+Extensions: The Ci-SSA + BHHO framework can be applied to other EEG tasks (emotion, fatigue) or multimodal signals.
+
+References
+
+Method & FS algorithms: J. Yedukondalu and L. D. Sharma, “Cognitive load detection using circulant singular spectrum analysis and Binary Harris Hawks Optimization based feature selection,” Biomed. Signal Process Control, vol. 79, p. 104006, Jan. 2023 
+ResearchGate
+
+Performance metrics (BHHO-KNN): “The proposed BHHO-KNN technique achieves the best classification accuracy of 96.88% and 95.28%, individually, for the STEW and MAT datasets.

@@ -1,0 +1,7 @@
+mne
+numpy
+scipy
+scikit-learn
+antropy
+matplotlib
+pandas

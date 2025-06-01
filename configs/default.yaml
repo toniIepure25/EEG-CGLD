@@ -54,9 +54,10 @@ classifier:
   k: 7 # Final KNN’s n_neighbors
 
 evaluation:
-  strategy: train_test # "train_test" or "LOSO"
+  strategy: train_test # "train_test" or "LOSO" or "nested_cv"
   train_ratio: 0.8 # If strategy="train_test", fraction used for training
   seed: 42 # Seed for train/test splitting
+  outer_folds: 5 # number of outer folds
 
 logging:
   mlflow:
@@ -65,3 +66,11 @@ logging:
   experiment_name: "eeg_knn_bhho_experiments"
   # Output folder for all models, figures, and logs
   output_dir: "${hydra:runtime.cwd}/results"
+
+cnn:
+  hidden_channels: [32, 64] # two convolutional blocks with 32→64 channels
+  kernel_sizes: [7, 5] # kernel sizes for Conv1d layers
+  pool_sizes: [2, 2] # pooling after each conv
+  embedding_dim: 128 # final embedding size
+  device: "cpu" # or "cuda" if GPU available
+  batch_size: 32 # how many epochs processed at once

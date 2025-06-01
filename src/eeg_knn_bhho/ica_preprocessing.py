@@ -1,4 +1,5 @@
 # src/eeg_knn_bhho/ica_preprocessing.py
+
 """
 ICA-based artifact removal for EEG epochs.
 Uses MNE’s ICA on continuous data to identify and remove artifact components,
@@ -18,7 +19,7 @@ selection rules (e.g., manually inspect top‐k components, use automated method
 import numpy as np
 import mne
 from sklearn.base import BaseEstimator, TransformerMixin
-from typing import Tuple, Optional
+from typing import Optional
 
 
 class ICACleaner(BaseEstimator, TransformerMixin):
@@ -94,7 +95,9 @@ class ICACleaner(BaseEstimator, TransformerMixin):
         sources = ica.get_sources(raw).get_data()  # shape: (n_components, total_samples)
         # Compute kurtosis along time‐axis for each component
         comp_kurtosis = np.apply_along_axis(
-            lambda u: ((u - u.mean()) / (u.std() + 1e-12))**4 .mean() - 3, axis=1, arr=sources
+            lambda u: (((u - u.mean()) / (u.std() + 1e-12))**4).mean() - 3,
+            axis=1,
+            arr=sources
         )
         # Mark any component whose |kurtosis| > threshold as artifact
         exclude = list(np.where(np.abs(comp_kurtosis) > self.kurtosis_thresh)[0])

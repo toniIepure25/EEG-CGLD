@@ -1,0 +1,67 @@
+# configs/default.yaml
+
+version_base: 1.1
+
+seed: 42
+
+data:
+  mat_dir: "${hydra:runtime.cwd}/data/raw/MAT Dataset"
+  stew_dir: "${hydra:runtime.cwd}/data/raw/STEW Dataset"
+  # If using LOSO, supply a list of subject IDs. Otherwise, keep this null.
+  subject_ids: null
+
+preprocess:
+  sfreq_mat: 128 # Resampling frequency (Hz) for MAT data
+  sfreq_stew: 256 # Sampling frequency (Hz) for STEW data
+  epoch_length: 1.0 # Length of each epoch in seconds
+  overlap: 0.5 # Fractional overlap between epochs (0 ≤ overlap < 1)
+  band_low: 1.0 # Bandpass lower cutoff (Hz)
+  band_high: 40.0 # Bandpass upper cutoff (Hz)
+  notch_freq: 50.0 # Notch filter frequency (Hz)
+  notch_Q: 30.0 # Notch filter quality factor
+  filter_order: 5 # Order of the Butterworth bandpass filter
+
+  ica_n_components: null # None (use all channels) or an int
+  ica_kurtosis_thresh: 5.0 # Threshold for absolute kurtosis to mark IC as artifact
+
+ssa:
+  n_imfs: 3 # Number of IMFs to extract per channel via CiSSA
+  n_jobs: 6 # Parallel jobs for CiSSA (-1 = all available cores)
+  ds: 2 # Downsampling factor for feature extraction
+
+feature_extraction:
+  bands: # Frequency bands for band-power via Welch
+    - [1, 4]
+    - [4, 8]
+    - [8, 13]
+    - [13, 30]
+    - [30, 40]
+  nperseg: 64 # Segment length for Welch’s method on full-rate signals
+  n_jobs: 6 # Parallel jobs for feature extraction (-1 = all available cores)
+
+sampling:
+  method: undersample # Either "undersample" or "smote"
+  random_state: 42 # Seed for reproducibility when sampling
+
+feature_selection:
+  pop_size: 50 # BHHO population size
+  max_iter: 60 # BHHO maximum iterations
+  transfer: "S" # BHHO transfer function ("S" or "V")
+  k: 7 # KNN neighbors inside BHHO fitness
+  cv: 10 # Number of CV folds in BHHO fitness
+
+classifier:
+  k: 7 # Final KNN’s n_neighbors
+
+evaluation:
+  strategy: train_test # "train_test" or "LOSO"
+  train_ratio: 0.8 # If strategy="train_test", fraction used for training
+  seed: 42 # Seed for train/test splitting
+
+logging:
+  mlflow:
+    # MLflow tracking folder under your project’s "results" directory
+    tracking_uri: "file:${hydra:runtime.cwd}/results/mlruns"
+  experiment_name: "eeg_knn_bhho_experiments"
+  # Output folder for all models, figures, and logs
+  output_dir: "${hydra:runtime.cwd}/results"

@@ -1,0 +1,7 @@
+# configs/sweeps/ssa.yaml
+defaults:
+  - override /ssa@n_imfs: [2, 3, 4]
+  - override /feature_extraction@ds: [2, 4, 8]
+  - override /preprocess@overlap: [0.25, 0.5, 0.75]
+#! python run_experiment.py -m ssa=ssa,feature_extraction=feature_extraction,preprocess=preprocess \
+#!    ssa.n_imfs=2,3,4 feature_extraction.ds=2,4,8 preprocess.overlap=0.25,0.5,0.75

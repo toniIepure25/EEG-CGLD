@@ -1,0 +1,52 @@
+seed: 42
+data:
+  mat_dir: ${env:PROJECT_DIR}/data/raw/MAT
+  stew_dir: ${env:PROJECT_DIR}/data/raw/STEW
+  subject_ids: null
+preprocess:
+  sfreq_mat: 128
+  sfreq_stew: 256
+  epoch_length: 1.0
+  overlap: 0.5
+  band_low: 1.0
+  band_high: 40.0
+  notch_freq: 50.0
+  notch_Q: 30.0
+  filter_order: 5
+ssa:
+  n_imfs: 3
+  n_jobs: -1
+feature_extraction:
+  bands:
+  - - 1
+    - 4
+  - - 4
+    - 8
+  - - 8
+    - 13
+  - - 13
+    - 30
+  - - 30
+    - 40
+  nperseg: 64
+  n_jobs: -1
+sampling:
+  method: undersample
+  random_state: 42
+feature_selection:
+  pop_size: 50
+  max_iter: 60
+  transfer: S
+  k: 7
+  cv: 10
+classifier:
+  k: 7
+evaluation:
+  strategy: train_test
+  train_ratio: 0.8
+  seed: 42
+logging:
+  mlflow:
+    tracking_uri: file:${env:PROJECT_DIR}/results/mlruns
+  experiment_name: eeg_knn_bhho_experiments
+  output_dir: ${env:PROJECT_DIR}/results

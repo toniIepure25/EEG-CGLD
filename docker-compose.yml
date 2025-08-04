@@ -1,8 +1,10 @@
-version: "3.8"
 services:
   app:
     build:
       context: /
       dockerfile: Dockerfile
+    labels:
+    - com.yourdomain.project.id=68909b6d08c374685f5b7781
     restart: always
-    workdir: / 
+    workdir: /
+version: '3.8'

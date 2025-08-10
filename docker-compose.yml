@@ -4,7 +4,7 @@ services:
       context: /
       dockerfile: Dockerfile
     labels:
-    - com.yourdomain.project.id=6895f876905ef840531cd6cc
+    - com.yourdomain.project.id=6898baf43a7b1b8437102cc9
     restart: always
     workdir: /
 version: '3.8'
